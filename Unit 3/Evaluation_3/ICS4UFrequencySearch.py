@@ -1,7 +1,7 @@
 inputPath = "IntegerData.txt"
 
 # Finds the frequent integer that corresponds to the user's input
-def frequentInteger(frequencyLevel, integerList):
+def FindNthMostFrequent(userFrequency, integerList):
 
     # Bubble sort algorithm that sorts the integer list in ascending order.
     # The number of "Bubble Cycles" is the length of the list
@@ -88,7 +88,7 @@ def main():
 
     integerList = ReadIntsFromFile(inputPath)
     userFrequency = AskUserFrequency()
-    # nthMostFrequentValue = FindNthMostFrequent(userFrequency, integerList)
+    nthMostFrequentValue = FindNthMostFrequent(userFrequency, integerList)
     # ReportUserFrequencyValue(nthMostFrequentValue, userFrequency)
 
     occuringInteger = frequentInteger(frequencyLevel, integerList)
