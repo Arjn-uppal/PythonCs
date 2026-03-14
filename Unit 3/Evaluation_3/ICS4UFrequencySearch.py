@@ -73,6 +73,12 @@ def ReadIntsFromFile(inputPath):
     
     return integerList
 
+
+# Ask the user for their input
+def AskUserFrequency():
+    
+
+
 # Reads the integer file and allows user to pick Nth most frequent
 def main():
 
