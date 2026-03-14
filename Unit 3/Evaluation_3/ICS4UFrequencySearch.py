@@ -76,19 +76,20 @@ def ReadIntsFromFile(inputPath):
 
 # Ask the user for their input
 def AskUserFrequency():
+
+    # input for finding frequent values in the list
+    frequencyLevel = int(input("Pick an integer frequency level: "))
     
+    return frequencyLevel
 
-
+ 
 # Reads the integer file and allows user to pick Nth most frequent
 def main():
 
     integerList = ReadIntsFromFile(inputPath)
-    # userFrequency = AskUserFrequency()
+    userFrequency = AskUserFrequency()
     # nthMostFrequentValue = FindNthMostFrequent(userFrequency, integerList)
     # ReportUserFrequencyValue(nthMostFrequentValue, userFrequency)
-
-    # input for finding frequent values in the list
-    frequencyLevel = int(input("Pick an integer frequency level: "))
 
     occuringInteger = frequentInteger(frequencyLevel, integerList)
 
