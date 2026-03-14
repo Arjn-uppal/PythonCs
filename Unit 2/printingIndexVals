@@ -1,0 +1,13 @@
+#The 2D list
+myData = []
+
+#Size of the two list
+numRows = 5
+
+for i in range(0,numRows):
+
+    #Ask for the row of data separated by commas
+    row = input("Enter the Entire Row: ").split(",")
+    myData.append(row)
+
+print(myData)
