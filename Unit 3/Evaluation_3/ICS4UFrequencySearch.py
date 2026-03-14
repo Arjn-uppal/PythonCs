@@ -49,6 +49,10 @@ def frequentInteger(frequencyLevel, integerList):
     #while n <= frequencyLevel:
 
 
+# Reads the integer data file
+def ReadIntsFromFile(inputPath):
+    
+
 # Reads the integer file and allows user to pick Nth most frequent
 def main():
 
