@@ -87,6 +87,65 @@ def sortPartition(a,low,high):
 		#Recursive sort the right partition
 		sortPartition(a,right + 1, high)
 
+#Quick Sort adapted to sort a 2D list based on the zero element of each "row" array
+#I use this to sort my frequency table
+def quickSort2D(a, sortColumnIndex):
+	sortPartition2D(a,0,len(a)-1, sortColumnIndex)
+
+#Recursive part of Quick Sort adapted to 2D lists      
+def sortPartition2D(a,low,high, sortColumnIndex):
+
+	if low < high:
+
+		#Set Markers
+		left = low
+		right = high
+
+		#Pick Pivot
+		pivot = a[low][sortColumnIndex]
+		pivotRow = a[low]
+		
+		#Set Active Marker
+		active = "R"
+
+		#Partition the list
+		while left < right:
+
+			#Right marker action
+			if active == "R":
+
+				#Move right marker left until it finds a value on the wrong side
+				while a[right][sortColumnIndex] >= pivot and left < right:
+					right = right - 1
+
+				#Move value that is on the wrong side
+				a[left] = a[right]
+
+				#Make other side active
+				active = "L"
+
+
+			if active == "L":
+
+				#Move left marker until it finds a value on the wrong side
+				while a[left][sortColumnIndex] <= pivot and left < right:
+					left = left + 1
+
+				#Move value that is on the wrong side
+				a[right] = a[left]
+
+				#Make other side active
+				active = "R"
+
+		#Put pivot in the correct position
+		a[left] = pivotRow
+
+		#Recursive sort the left partition
+		sortPartition2D(a,low,left-1, sortColumnIndex)
+
+		#Recursive sort the right partition
+		sortPartition2D(a,right + 1, high, sortColumnIndex)
+		
 
 # Finds the frequent integer that corresponds to the user's input
 def FindNthMostFrequent(userFrequency, integerList):
@@ -195,16 +254,119 @@ def AskUserFrequency():
     
     return frequencyLevel
 
- 
+def ProcessTallyCount (tallyCount):
+	# Expect a 2D list of data values and their frequencies
+	# e.g. : [ [2,5] , [3,4] , [5, 4]]
+	# Generate a new 2D list of frequencies with their corresponding data value(s)
+	# e.g [ [5, 2] , [4, 3, 5] ]
+
+	#First sort the tallyCount by Frequency (the second column) so that we can binarySearch it
+	quickSort2D(tallyCount, 1)
+	frequencyTable = []
+	for rowIndex in range(0, len(tallyCount)):
+		
+		thisFrequency = tallyCount[rowIndex][1]
+		thisDataValue = tallyCount[rowIndex][0]
+
+		#Search the frequency table to see if we already have a row for this frequency
+		foundIndex = binarySearch(frequencyTable, thisFrequency)
+
+		if foundIndex > -1:
+			# If found, pull the frequency row, and append the data value to the end			
+			foundRow :list[int] = frequencyTable[foundIndex]
+			foundRow.append(thisDataValue)
+		else:
+			frequencyTable.append([thisFrequency, thisDataValue])
+			
+	return frequencyTable
+
+def RankFrequencies(frequencyTable):
+	# Make a league table of descending frequencies and ascending data values
+	# e.g. 
+	#
+	#	| Rank | Frequency | Data Value
+	#	| ASC  | DESC      | ASC
+	#	|    1 |   5       | 3
+	#	|    2 |   3       | 12
+	#	|    3 |   3       | 13
+	#	|    4 |   2       | 2
+	#	|    5 |   1       | 9
+	#	|    6 |   1       | 10
+	#	|    7 |   1       | 19
+
+
+	# When user asks for N=3, i.e. 3rd most frequent, we look up Rank = 3 in this table.
+
+	#First make sure frequencyTable is sorted by frequency (column 0)
+	quickSort2D(frequencyTable, 0)
+
+	#Make a new league table
+	leagueTable : list[list[int]] = []
+
+	# Walk the frequencyTable backwards, reading the highest frequencies first
+	currentRank = 1
+	for rowIndex in range(len(frequencyTable)-1, -1, -1):
+		currentFrequency = frequencyTable[rowIndex][0]
+		currentRow = frequencyTable[rowIndex]
+		if len(currentRow) == 2:
+			# This means there is only one data value with this frequency
+			# So we just record it in the league table
+			leagueTable.append([currentRank, currentFrequency, currentRow[1]])
+			currentRank += 1
+		else:
+			# This means there are multiple data rows with the SAME frequency,
+			# and we need to add them to the league table in ascending order.
+
+			# So first get the data columns without the frequency
+			currentRowData = currentRow[1:len(currentRow)]
+
+			# Sort ascending
+			quickSort(currentRowData)
+
+			# Copy each data value to the league table
+			for colIndex in range(0, len(currentRowData)):
+				leagueTable.append([currentRank, currentFrequency, currentRowData[colIndex]])
+				currentRank += 1
+
+	return leagueTable
+
 # Reads the integer file and allows user to pick Nth most frequent
 def main():
 
     integerList = ReadIntsFromFile(inputPath)
-
-    #userFrequency = AskUserFrequency()
+    print("Source Integer List:")
+    print(integerList)
+    print()
+    
+    userFrequencyIndex = AskUserFrequency() - 1
 
     countedIntList = TallyUpIntegers(integerList)
-    print (countedIntList)
+    print("Tally Count:")
+    print(countedIntList)
+    print()
+
+    frequencyTable = ProcessTallyCount(countedIntList)
+    print("Frequency Table:")
+    print(frequencyTable)
+    print()
+
+    rankedFrequencyTable = RankFrequencies(frequencyTable)
+    print("Ranked Frequency Table:")
+    print(rankedFrequencyTable)
+    print()
+
+    userRequestedDataValue = rankedFrequencyTable[userFrequencyIndex][2]
+    print("User Frequency: ", userFrequencyIndex + 1)
+    print("User data: ", userRequestedDataValue)
+    print("Frequency of user data: ", rankedFrequencyTable[userFrequencyIndex][1])
+
+    #tList = [[1,1,2,5,55], [4,3], [3,4,32]]
+    #quickSort2D(frequencyTable)
+    #print(frequencyTable)
+
+	#print(testList)
+	#quickSort2D(testList)
+	
     #countedIntList = twoDList(integerList)
 
     #nthMostFrequentValue = FindNthMostFrequent(userFrequency, integerList)
