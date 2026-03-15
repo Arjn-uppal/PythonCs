@@ -45,6 +45,7 @@ def FindNthMostFrequent(userFrequency, integerList):
 
         frequencyList.append(frequency)
 
+    return frequencyList
     n = 1
     #while n <= frequencyLevel:
 
@@ -91,7 +92,7 @@ def main():
     nthMostFrequentValue = FindNthMostFrequent(userFrequency, integerList)
     # ReportUserFrequencyValue(nthMostFrequentValue, userFrequency)
 
-    occuringInteger = frequentInteger(frequencyLevel, integerList)
+    occuringInteger = FindNthMostFrequent(userFrequency, integerList)
 
     print()
     print(occuringInteger)
