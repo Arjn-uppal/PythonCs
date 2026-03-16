@@ -365,16 +365,19 @@ def main():
 
 	countedIntList = TallyUpIntegers(integerList)
 	print("Tally Count:")
+	print("| Integer | Count of Integer |")
 	print2DList(countedIntList)
 	print()
 
 	frequencyTable = ProcessTallyCount(countedIntList)
 	print("Frequency Table:")
+	print("| Frequency | Integers... |")
 	print2DList(frequencyTable)
 	print()
 
 	rankedFrequencyTable = RankFrequencies(frequencyTable)
 	print("Ranked Frequency Table:")
+	print("| Ranking | Frequency | Integer |")
 	print2DList(rankedFrequencyTable)
 	print()
 
