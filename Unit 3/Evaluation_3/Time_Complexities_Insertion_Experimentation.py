@@ -27,8 +27,15 @@ def insertionSort(a):
 def CreateNumList(listLength):
     numList = []
     for i in range(listLength):
-        numList.append(random.randint(1, 999999))
+        numList.append(random.randint(1, 3000))
     return numList
+
+def Create100SortedLists(listLength):
+    listOf100Lists = []
+    for i in range(100):
+        listOf100Lists.append(insertionSort(CreateNumList(listLength)))
+
+    return listOf100Lists
 
 def Create100Lists(listLength):
     listOf100Lists = []
@@ -37,43 +44,63 @@ def Create100Lists(listLength):
 
     return listOf100Lists
 
-def main():
+def Create100ReverseSortedLists(listLength):
+    listOf100Lists = []
+    for i in range(100):
+        sortedList = insertionSort(CreateNumList(listLength))
+        reverseList = []
+        for n in range(len(sortedList)-1, -1, -1):
+            reverseList.append(sortedList[n])
 
-    
-    
-    #Create 100 lists for Average case (entirely randomly ordered lists)
-    lists = Create100Lists(200)
-    listNumber = 1
+        listOf100Lists.append(reverseList)
+
+    return listOf100Lists
+
+def AverageTime100Sorts(lists):
+
+    runningTotalTime = 0
     for list in lists:
         start = timeit.default_timer()
-
         insertionSort(list)
-
         end = timeit.default_timer()
-
         time = end - start
+        runningTotalTime += time
 
-        timeMilli = round(time * 10**3, 6)
+    #During testing noticed with a manual stop watch that 0.086 from timeit actually is 8.6 seconds
+    #So I am treating timeit values as hectoseconds (s * 10^2)
 
-        print(listNumber, timeMilli, "ms")
-        listNumber += 1
+    #Calculate the average
+    averageExecutionHectoSeconds = runningTotalTime / len(lists)
 
-    return
+    #Convert hectoseconds to milliseconds
+    averageExecutionMilliSeconds = averageExecutionHectoSeconds * 100000
 
-    a = [39,65,2,1,67,54,98,34,9,665,2,1,67,54,98,34,9,665,2,1,67,54,98,34,9,665,2,1,67,54,98,34,9,665,2,1,67,54,98,34,9,6]
+    #Trial runs show that even with the smallest list of 200 items, whole milliseconds are accurate enough
+    #So truncate to int
+    return averageExecutionMilliSeconds
 
-    start = timeit.default_timer()
+def AverageCaseExperiment():
+    #Do 100 experiments using the Average case (100 random unsorted lists)
+        for listLength in range(200, 3200, 200):
+            lists = Create100Lists(listLength)
+        print(listLength, AverageTime100Sorts(lists))
 
-    a = insertionSort(a)
+def BestCaseExperiment():
+    #Do 100 experiments using the Best case (100 pre-sorted lists)
+    for listLength in range(200, 3200, 200):
+        lists = Create100SortedLists(listLength)
+        print(listLength, AverageTime100Sorts(lists))
 
-    end = timeit.default_timer()
+def main():
 
-    time = end - start
+    #Do 100 experiments using the Average case (100 random unsorted lists)
+    AverageCaseExperiment()
 
-    timeMilli = round(time * 10**3, 6)
+    #Do 100 experiments using the Best case (100 pre-sorted lists)
+    #BestCaseExperiment()
 
-    print(timeMilli, "ms")
-    
-
+    #lists = Create100ReverseSortedLists(20)
+    #for list in lists:
+        #print(list)
 
 main()
