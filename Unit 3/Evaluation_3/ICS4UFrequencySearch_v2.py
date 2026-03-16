@@ -31,10 +31,11 @@ def binarySearch(a, target):
 	#Only gets here if target wasn't found
 	return -1
 
-
+# Imported from class notes
 def quickSort(a):
 	sortPartition(a,0,len(a)-1)
 
+# Imported from class notes
 def sortPartition(a,low,high):
 
 	if low < high:
@@ -87,8 +88,8 @@ def sortPartition(a,low,high):
 		#Recursive sort the right partition
 		sortPartition(a,right + 1, high)
 
-#Quick Sort adapted to sort a 2D list based on the zero element of each "row" array
-#I use this to sort my frequency table
+#Quick Sort adapted to sort a 2D list based on the chosen element of each "row" array
+#Used for sorting the frequency table
 def quickSort2D(a, sortColumnIndex):
 	sortPartition2D(a,0,len(a)-1, sortColumnIndex)
 
@@ -150,7 +151,7 @@ def sortPartition2D(a,low,high, sortColumnIndex):
 #count through the integer list making a 2d list of unique values and frequencies
 def TallyUpIntegers(integerList):
 
-	#First sort the list, so that we can use binary search on it
+	#First sort the list, so that the new list we make is made in order, so we can use binary search on it
 	quickSort(integerList)
 
 	frequencies = []
@@ -169,6 +170,7 @@ def TallyUpIntegers(integerList):
 
 	return frequencies
 
+# Make sure the string holds an integer
 def represents_int(s):
 	try:
 		int(s)
@@ -190,14 +192,10 @@ def ReadIntsFromFile(inputPath):
 		return integerList
 
 	
-	# Reads each line, converts string to int, and adds it to a list.
-	# Stops reading the file when it gets to the end
+	# Reads all lines, converts string to int, and adds it to a list.
 	for line in integerFile:
 		singularInteger = line.rstrip("\n")
 
-		#if singularInteger == "":
-			#break
-		#else:
 		if represents_int(singularInteger):
 			trueInt = int(singularInteger)
 			integerList.append(trueInt)
@@ -308,13 +306,14 @@ def RankFrequencies(frequencyTable):
 
 	return leagueTable
 
+# Format a 2D list for the screen
 def print2DList(TwoDlist):
 	#Print out a row per line
 	for row in range(0, len(TwoDlist)):
 		print(TwoDlist[row])
 
+#Validate user input - not longer than array
 def ValidateUserInputNotTooBig(userFrequencyIndex, rankedFrequencyTable):
-	#Validate user input - not longer than array
 	if userFrequencyIndex > len(rankedFrequencyTable) -1:
 		numFrequencies = len(rankedFrequencyTable)
 		print("You requested N =", userFrequencyIndex + 1, "but we only found", numFrequencies, "frequenc", end="")
@@ -328,8 +327,8 @@ def ValidateUserInputNotTooBig(userFrequencyIndex, rankedFrequencyTable):
 
 	return userFrequencyIndex
 
-def ValidateUserInputNotTooSmall(userFrequencyIndex):
-	#Validate user input - not shorter than array
+#Validate user input - not shorter than array
+def ValidateUserInputNotTooSmall(userFrequencyIndex):	
 	if userFrequencyIndex < 0:
 		print("You requested N =", userFrequencyIndex + 1, "so we are showing the *most* frequent below.")	
 		print()	
@@ -337,6 +336,7 @@ def ValidateUserInputNotTooSmall(userFrequencyIndex):
 
 	return userFrequencyIndex
 
+# Format and output the results
 def ReportFindings(userFrequencyIndex, rankedFrequencyTable):
 
 	userFrequencyIndex = ValidateUserInputNotTooBig(userFrequencyIndex, rankedFrequencyTable)
@@ -350,56 +350,45 @@ def ReportFindings(userFrequencyIndex, rankedFrequencyTable):
 # Reads the integer file and allows user to pick Nth most frequent
 def main():
 
+	# Read the input file
 	integerList = ReadIntsFromFile(inputPath)
 
+	# Validate the input
 	if len(integerList) < 1:
 		print("The input file has no valid data. Exiting.")
 		print()
 		return
 
+	# Show the integer list
 	print("Source Integer List:")
 	print(integerList)
 	print()
 	
+	# Ask the user
 	userFrequencyIndex = AskUserFrequency() - 1
 
+	# Count the inegers
 	countedIntList = TallyUpIntegers(integerList)
 	print("Tally Count:")
 	print("| Integer | Count of Integer |")
 	print2DList(countedIntList)
 	print()
 
+	# Gather up the frequencies, collapse duplicates
 	frequencyTable = ProcessTallyCount(countedIntList)
 	print("Frequency Table:")
 	print("| Frequency | Integers... |")
 	print2DList(frequencyTable)
 	print()
 
+	# Rank the frequencies
 	rankedFrequencyTable = RankFrequencies(frequencyTable)
 	print("Ranked Frequency Table:")
 	print("| Ranking | Frequency | Integer |")
 	print2DList(rankedFrequencyTable)
 	print()
 
+	# Output findings
 	ReportFindings(userFrequencyIndex, rankedFrequencyTable)
-	
-
-	#tList = [[1,1,2,5,55], [4,3], [3,4,32]]
-	#quickSort2D(frequencyTable)
-	#print(frequencyTable)
-
-	#print(testList)
-	#quickSort2D(testList)
-	
-	#countedIntList = twoDList(integerList)
-
-	#nthMostFrequentValue = FindNthMostFrequent(userFrequency, integerList)
-	# ReportUserFrequencyValue(nthMostFrequentValue, userFrequency)
-
-	#occuringInteger = FindNthMostFrequent(userFrequency, integerList)
-
-	#print()
-	#print(countedIntList)
-	
 
 main()
