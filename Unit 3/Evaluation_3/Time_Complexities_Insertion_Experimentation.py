@@ -1,8 +1,9 @@
 import timeit
+import random
 
-#a is the list to sort
-#This algorithm sorts in ascending order (smallest to biggest)
-
+#Using the Insertion Sort code from class.
+#a is the list to sort.
+#This algorithm sorts in ascending order (smallest to biggest).
 def insertionSort(a):
 
     #Cycle through all the elements in the list 1 -> end (Assume 0 index is sorted)
@@ -23,9 +24,43 @@ def insertionSort(a):
 
     return a
 
+def CreateNumList(listLength):
+    numList = []
+    for i in range(listLength):
+        numList.append(random.randint(1, 999999))
+    return numList
+
+def Create100Lists(listLength):
+    listOf100Lists = []
+    for i in range(100):
+        listOf100Lists.append(CreateNumList(listLength))
+
+    return listOf100Lists
 
 def main():
-    a = [39,65,2,1,67,54,98,34,9,6]
+
+    
+    
+    #Create 100 lists for Average case (entirely randomly ordered lists)
+    lists = Create100Lists(200)
+    listNumber = 1
+    for list in lists:
+        start = timeit.default_timer()
+
+        insertionSort(list)
+
+        end = timeit.default_timer()
+
+        time = end - start
+
+        timeMilli = round(time * 10**3, 6)
+
+        print(listNumber, timeMilli, "ms")
+        listNumber += 1
+
+    return
+
+    a = [39,65,2,1,67,54,98,34,9,665,2,1,67,54,98,34,9,665,2,1,67,54,98,34,9,665,2,1,67,54,98,34,9,665,2,1,67,54,98,34,9,6]
 
     start = timeit.default_timer()
 
@@ -35,9 +70,9 @@ def main():
 
     time = end - start
 
-    timeMilli = round(time * 10**3, 3)
+    timeMilli = round(time * 10**3, 6)
 
-    print(timeMilli)
+    print(timeMilli, "ms")
     
 
 
