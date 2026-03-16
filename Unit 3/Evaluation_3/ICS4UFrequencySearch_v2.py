@@ -1,4 +1,11 @@
-inputPath = "Unit 3/Evaluation_3/InputFiles/200 Thousand Integers.txt"
+import sys
+
+inputPath = "Unit 3/Evaluation_3/InputFiles/202 Twenty Thousand Integers.txt"
+
+# TESTED with input files up to 20,000 lines. Larger may cause recursion limit error.
+# Recursion limit is set to 8000 
+sys.setrecursionlimit(8000)
+
 
 #Binary Search modified to search the first "column" of a 2-d array of arrays
 #a is the list to search through
@@ -348,7 +355,7 @@ def ReportFindings(userFrequencyIndex, rankedFrequencyTable):
 	print("Frequency of user data:", rankedFrequencyTable[userFrequencyIndex][1])
 
 # Reads the integer file and allows user to pick Nth most frequent
-def main():
+def main():	
 
 	# Read the input file
 	integerList = ReadIntsFromFile(inputPath)
@@ -361,7 +368,14 @@ def main():
 
 	# Show the integer list
 	print("Source Integer List:")
-	print(integerList)
+	if len(integerList) < 50:
+		#Print the whole thing if small
+		print(integerList)
+	else:
+		#Print the first few if massive
+		for i in range(0, 20):
+			print(integerList[i], ",", end="")
+		print("...")
 	print()
 	
 	# Ask the user
