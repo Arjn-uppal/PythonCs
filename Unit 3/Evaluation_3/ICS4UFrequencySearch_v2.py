@@ -218,7 +218,7 @@ def AskUserFrequency():
 
 	# input for finding frequent values in the list
 	while True:
-		frequencyLevel = input("Pick an integer frequency level: ")
+		frequencyLevel = input("Enter an integer for frequency ranking, N (1 for most frequent, 2 for second most frequent, etc.): ")
 		if represents_int(frequencyLevel):
 			return int(frequencyLevel)
 		else:
