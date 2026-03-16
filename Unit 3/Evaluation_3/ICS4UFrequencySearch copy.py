@@ -1,4 +1,4 @@
-inputPath = "IntegerData2.txt"
+inputPath = "Unit 3/Evaluation_3/InputFiles/001 SingleDataValue.txt"
 
 #Binary Search modified to search the first "column" of a 2-d array of arrays
 #a is the list to search through
@@ -284,15 +284,20 @@ def RankFrequencies(frequencyTable):
 	# Make a league table of descending frequencies and ascending data values
 	# e.g. 
 	#
-	#	| Rank | Frequency | Data Value
-	#	| ASC  | DESC      | ASC
-	#	|    1 |   5       | 3
-	#	|    2 |   3       | 12
-	#	|    3 |   3       | 13
-	#	|    4 |   2       | 2
-	#	|    5 |   1       | 9
-	#	|    6 |   1       | 10
-	#	|    7 |   1       | 19
+	# Given an unordered input frequencyTable as follows:
+	#
+	#	|Frequency | Data Values
+	#	| 1		   | 1, 2, 55 ,56, 99, 654
+	#	| 4		   | 3
+	# 	| 3		   | 4, 3, 2
+	#
+	# ... we want to generate the following:
+	#
+	#	| Rank | Frequency | *Lowest* Data Value
+	#	| ASC  | DESC      | 
+	#	|    1 |   4       | 3
+	#	|    2 |   3       | 2
+	#	|    3 |   1       | 1
 
 
 	# When user asks for N=3, i.e. 3rd most frequent, we look up Rank = 3 in this table.
@@ -303,32 +308,82 @@ def RankFrequencies(frequencyTable):
 	#Make a new league table
 	leagueTable : list[list[int]] = []
 
-	# Walk the frequencyTable backwards, reading the highest frequencies first
+	# Walk the frequencyTable *backwards*, reading the highest frequencies first
 	currentRank = 1
 	for rowIndex in range(len(frequencyTable)-1, -1, -1):
-		currentFrequency = frequencyTable[rowIndex][0]
+
+		# Note the current frequency row
 		currentRow = frequencyTable[rowIndex]
+
+		# Note the current frequency
+		currentFrequency = currentRow[0]
+		
 		if len(currentRow) == 2:
 			# This means there is only one data value with this frequency
-			# So we just record it in the league table
-			leagueTable.append([currentRank, currentFrequency, currentRow[1]])
+			# So let's note the current data value:
+			currentDataValue = currentRow[1]
+
+			# So we just record it in the league table:
+			leagueTable.append([currentRank, currentFrequency, currentDataValue])
+
+			# Increment the rank, ready for the next row
 			currentRank += 1
 		else:
-			# This means there are multiple data rows with the SAME frequency,
-			# and we need to add them to the league table in ascending order.
+			# This means there are multiple data values at the SAME frequency,
+			# and we need to add the *lowest* data value *only* to the league table.
 
-			# So first get the data columns without the frequency
-			currentRowData = currentRow[1:len(currentRow)]
+			# So first get the data columns without the frequency (so skip index 0)
+			currentRowDataValues = currentRow[1:len(currentRow)]
 
-			# Sort ascending
-			quickSort(currentRowData)
+			# Sort the data values ascending
+			quickSort(currentRowDataValues)
 
-			# Copy each data value to the league table
-			for colIndex in range(0, len(currentRowData)):
-				leagueTable.append([currentRank, currentFrequency, currentRowData[colIndex]])
-				currentRank += 1
+			# Copy first (lowest) data value to the league table
+			leagueTable.append([currentRank, currentFrequency, currentRowDataValues[0]])
+
+			#Increment currentRank for the next row
+			currentRank += 1			
 
 	return leagueTable
+
+def print2DList(TwoDlist):
+	#Print out a row per line
+	for row in range(0, len(TwoDlist)):
+		print(TwoDlist[row])
+
+def ValidateUserInputNotTooBig(userFrequencyIndex, rankedFrequencyTable):
+	#Validate user input - not longer than array
+	if userFrequencyIndex > len(rankedFrequencyTable) -1:
+		numFrequencies = len(rankedFrequencyTable)
+		print("You requested N =", userFrequencyIndex + 1, "but we only found", numFrequencies, "frequenc", end="")
+		if numFrequencies == 1:
+			print("y. Showing the least frequent below:")
+		else:
+			print("ies. Showing the least frequent below:")
+		print()
+
+		userFrequencyIndex = len(rankedFrequencyTable) -1
+
+	return userFrequencyIndex
+
+def ValidateUserInputNotTooSmall(userFrequencyIndex):
+	#Validate user input - not shorter than array
+	if userFrequencyIndex < 0:
+		print("You requested N =", userFrequencyIndex + 1, "so we are showing the *most* frequent below.")	
+		print()	
+		userFrequencyIndex = 0
+
+	return userFrequencyIndex
+
+def ReportFindings(userFrequencyIndex, rankedFrequencyTable):
+
+	userFrequencyIndex = ValidateUserInputNotTooBig(userFrequencyIndex, rankedFrequencyTable)
+	userFrequencyIndex = ValidateUserInputNotTooSmall(userFrequencyIndex)
+
+	userRequestedDataValue = rankedFrequencyTable[userFrequencyIndex][2]
+	print("User Frequency (N):", userFrequencyIndex + 1)
+	print("User data:", userRequestedDataValue)
+	print("Frequency of user data:", rankedFrequencyTable[userFrequencyIndex][1])
 
 # Reads the integer file and allows user to pick Nth most frequent
 def main():
@@ -342,23 +397,21 @@ def main():
 
     countedIntList = TallyUpIntegers(integerList)
     print("Tally Count:")
-    print(countedIntList)
+    print2DList(countedIntList)
     print()
 
     frequencyTable = ProcessTallyCount(countedIntList)
     print("Frequency Table:")
-    print(frequencyTable)
+    print2DList(frequencyTable)
     print()
 
     rankedFrequencyTable = RankFrequencies(frequencyTable)
     print("Ranked Frequency Table:")
-    print(rankedFrequencyTable)
+    print2DList(rankedFrequencyTable)
     print()
 
-    userRequestedDataValue = rankedFrequencyTable[userFrequencyIndex][2]
-    print("User Frequency: ", userFrequencyIndex + 1)
-    print("User data: ", userRequestedDataValue)
-    print("Frequency of user data: ", rankedFrequencyTable[userFrequencyIndex][1])
+    ReportFindings(userFrequencyIndex, rankedFrequencyTable)
+    
 
     #tList = [[1,1,2,5,55], [4,3], [3,4,32]]
     #quickSort2D(frequencyTable)
