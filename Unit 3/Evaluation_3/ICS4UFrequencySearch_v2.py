@@ -217,9 +217,13 @@ def ReadIntsFromFile(inputPath):
 def AskUserFrequency():
 
 	# input for finding frequent values in the list
-	frequencyLevel = int(input("Pick an integer frequency level: "))
+	while True:
+		frequencyLevel = input("Pick an integer frequency level: ")
+		if represents_int(frequencyLevel):
+			return int(frequencyLevel)
+		else:
+			print("Invalid. Please enter an integer.")
 	
-	return frequencyLevel
 
 def ProcessTallyCount (tallyCount):
 	# Expect a 2D list of data values and their frequencies
