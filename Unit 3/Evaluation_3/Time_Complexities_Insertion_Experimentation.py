@@ -81,15 +81,27 @@ def AverageTime100Sorts(lists):
 
 def AverageCaseExperiment():
     #Do 100 experiments using the Average case (100 random unsorted lists)
-        for listLength in range(200, 3200, 200):
-            lists = Create100Lists(listLength)
-        print(listLength, AverageTime100Sorts(lists))
+    print("Average Case Timings")
+    print("| List Length | Execution Time |")
+    for listLength in range(200, 3200, 200):
+        lists = Create100Lists(listLength)
+        print(listLength, AverageTime100Sorts(lists), sep=",")
 
 def BestCaseExperiment():
     #Do 100 experiments using the Best case (100 pre-sorted lists)
+    print("Best Case Timings")
+    print("| List Length | Execution Time |")
     for listLength in range(200, 3200, 200):
         lists = Create100SortedLists(listLength)
-        print(listLength, AverageTime100Sorts(lists))
+        print(listLength, AverageTime100Sorts(lists), sep=",")
+
+def WorstCaseExperiment():
+    print("Worst Case Timings")
+    print("| List Length | Execution Time |")
+    #Do 100 experiments using the Worst case (100 reverse-sorted lists)
+    for listLength in range(200, 3200, 200):
+        lists = Create100ReverseSortedLists(listLength)
+        print(listLength, AverageTime100Sorts(lists), sep=",")
 
 def main():
 
@@ -97,10 +109,9 @@ def main():
     AverageCaseExperiment()
 
     #Do 100 experiments using the Best case (100 pre-sorted lists)
-    #BestCaseExperiment()
+    BestCaseExperiment()
 
-    #lists = Create100ReverseSortedLists(20)
-    #for list in lists:
-        #print(list)
+    #Do 100 experiments using the Worst case (100 reverse-sorted lists)
+    WorstCaseExperiment()
 
 main()
