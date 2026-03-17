@@ -24,19 +24,15 @@ def insertionSort(a):
 
     return a
 
+#Create a list of integers of any given length
 def CreateNumList(listLength):
     numList = []
     for i in range(listLength):
         numList.append(random.randint(1, 3000))
     return numList
 
-def Create100SortedLists(listLength):
-    listOf100Lists = []
-    for i in range(100):
-        listOf100Lists.append(insertionSort(CreateNumList(listLength)))
-
-    return listOf100Lists
-
+#Create 100 lists of integers each left in a random unsorted order
+#for the average case
 def Create100Lists(listLength):
     listOf100Lists = []
     for i in range(100):
@@ -44,10 +40,24 @@ def Create100Lists(listLength):
 
     return listOf100Lists
 
+
+#Create 100 lists of integers each pre-sorted in ascending order
+#for the best case
+def Create100SortedLists(listLength):
+    listOf100Lists = []
+    for i in range(100):
+        listOf100Lists.append(insertionSort(CreateNumList(listLength)))
+
+    return listOf100Lists
+
+#Create 100 lists of integers each reverse-sorted in descending order
+#for the worst case
 def Create100ReverseSortedLists(listLength):
     listOf100Lists = []
     for i in range(100):
         sortedList = insertionSort(CreateNumList(listLength))
+
+        #reverse the sorted list
         reverseList = []
         for n in range(len(sortedList)-1, -1, -1):
             reverseList.append(sortedList[n])
@@ -56,14 +66,19 @@ def Create100ReverseSortedLists(listLength):
 
     return listOf100Lists
 
+#Measure the average time to sort 100 lists
 def AverageTime100Sorts(lists):
 
+    #Running total of all 100 execution times
     runningTotalTime = 0
     for list in lists:
+        #Time the sorting of each list
         start = timeit.default_timer()
         insertionSort(list)
         end = timeit.default_timer()
         time = end - start
+        
+        #Increment running total
         runningTotalTime += time
 
     #During testing noticed with a manual stop watch that 0.086 from timeit actually is 8.6 seconds
@@ -77,7 +92,7 @@ def AverageTime100Sorts(lists):
 
     #Trial runs show that even with the smallest list of 200 items, whole milliseconds are accurate enough
     #So truncate to int
-    return averageExecutionMilliSeconds
+    return int(averageExecutionMilliSeconds)
 
 def AverageCaseExperiment():
     #Do 100 experiments using the Average case (100 random unsorted lists)

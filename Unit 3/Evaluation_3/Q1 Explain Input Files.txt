@@ -1,0 +1,21 @@
+I created 10 input files to try to cover every possibility, including:
+ - An empty file, no data
+ - A file with only one data value
+ - Invalid Data values
+ - Mixture of valid and invalid data
+ - Data with only 1 frequency
+ - Data with 2 frequencies
+ - Data with 2 matching frequencies 
+ - File of 1000 integers many frequencies
+ - File of 10,000 integers many frequencies
+ - File of 20,000 integers many frequencies
+ 
+I started to run into recursion limits, so I increased the limit to 8000
+and this was enough to handle the 20,000 integer file. 
+This limit mattered because of the recursive quick sort I used a lot
+for sorting both my 1-d and 2-d lists.
+
+I also tried to catch when users type non-integers for the N value. 
+Also if the user asks for N bigger than the frequecies we find,
+I report that, but still show the least frequent. 
+If user N is less than 1 I report that and show the most frequent. 
