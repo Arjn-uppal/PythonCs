@@ -5,6 +5,9 @@ class Circle:
 
         #Set the radius
         circle.radius = radius
+        
+        #Create behaviours 
+        
 
 
 def main():
