@@ -27,6 +27,25 @@ class Circle:
 
 
 def main():
+    
+    #Creation of  circle objects
+    circleObject1 = Circle(5)
+    circleObject2 = Circle(6)
+    circleObject3 = Circle(10)
+    circleObject4 = Circle(17)
+    
+    #display results
+    print(circleObject1)
+    print()
+    
+    print(circleObject2)
+    print()
+    
+    print(circleObject3)
+    print()
+    
+    print(circleObject4)
+    print()
 
 
 
