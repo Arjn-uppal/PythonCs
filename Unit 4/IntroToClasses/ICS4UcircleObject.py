@@ -6,7 +6,11 @@ class Circle:
         #Set the radius
         circle.radius = radius
         
-        #Create behaviours 
+    #Create behaviours
+    def getArea(circle):
+        
+        #Calculate area
+        circle.radius = 3.14 * circle.radius**2
         
 
 
