@@ -5,25 +5,23 @@ class Circle:
 
         #Set the radius
         circle.radius = radius
-        area = circle.radius
-        circumference = circle.radius
         
     #Calculates the area
     def getArea(circle):
         
         #Calculation
-        area = 3.14 * circle.radius**2
+        circle.radius = 3.14 * circle.radius**2
         
         
     #Calculates the circumference
     def getCircumference(circle):
         
         #Calculation
-        circumference = 2 * 3.14 * circle.radius
+        circle.radius = 2 * 3.14 * circle.radius
         
         
     def __str__(circle):
-        return "Area of circle: " + str(area) + "\nCircumference of circle: " + str(circumference) + "\n"
+        return "Area of circle: " + str(circle.radius) + "\nCircumference of circle: " + str(circle.radius) + "\n"
 
 
 def main():
@@ -37,6 +35,15 @@ def main():
     #Use area and circumference methods
     circleObject1.getArea()
     circleObject1.getCircumference()
+
+    circleObject2.getArea()
+    circleObject2.getCircumference()
+
+    circleObject3.getArea()
+    circleObject3.getCircumference()
+
+    circleObject4.getArea()
+    circleObject4.getCircumference()
     
     #display results
     print(circleObject1)
