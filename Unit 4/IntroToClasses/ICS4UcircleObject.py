@@ -19,7 +19,7 @@ class Circle:
         circle.radius = 2 * 3.14 * circle.radius
         
     def __str__(circle):
-        return "Area of circle: " + self.owner + "\nBalance: $" + str(self.balance) + "\n"
+        return "Area of circle: " + circle.radius + "\nBalance: $" + str(self.balance) + "\n"
 
 
 def main():
