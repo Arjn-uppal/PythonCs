@@ -34,6 +34,10 @@ def main():
     circleObject3 = Circle(10)
     circleObject4 = Circle(17)
     
+    #Use area and circumference methods
+    circleObject1.getArea()
+    circleObject1.getCircumference()
+    
     #display results
     print(circleObject1)
     print()
