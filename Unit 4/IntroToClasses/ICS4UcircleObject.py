@@ -23,7 +23,7 @@ class Circle:
         
         
     def __str__(circle):
-        return "Area of circle: " + circle.radius + "\nBalance: $" + str(self.balance) + "\n"
+        return "Area of circle: " + str(area) + "\nCircumference of circle: " + str(circumference) + "\n"
 
 
 def main():
