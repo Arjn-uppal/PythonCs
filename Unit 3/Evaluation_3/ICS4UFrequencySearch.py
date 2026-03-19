@@ -1,6 +1,6 @@
 import sys
 
-inputPath = "Unit 3/Evaluation_3/InputFiles/Q1 201 Ten Thousand Integers.txt"
+inputPath = "Unit 3/Evaluation_3/InputFiles/Q1 003 SomeValidValues.txt"
 
 # TESTED with input files up to 20,000 lines. Larger may cause recursion limit error.
 # Recursion limit is set to 8000 
