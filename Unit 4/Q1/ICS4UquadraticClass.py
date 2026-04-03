@@ -26,66 +26,99 @@ class Quadratic:
 
     def StandardForm(self):
 
-        #To display Standard Form  : y = Ax^2 + Bx + C
-
-        displayA = self.DontShow1ForA(self.A)
-        displayB = self.DontShow1ForB(self.B)
-        displayC = self.DontShow1ForC(self.C)
-
-        # Using the unicode escape sequence for superscript-2 (\u00b2)
-        return "y = " + displayA + "x\u00b2 " + displayB + "x " + displayC
+        #To display Standard Form  : y = Ax^2 + Bx + C        
+        
+        return self.DisplayA() + self.DisplayB() + self.DisplayConstant(self.C)
     
-    def DontShow1ForA(self, coefficientCouldBe1):
+    def DisplayA(self):
         # When A is 1 or -1 we don't need to diplay the "1" or the "-" sign
-
-        display = str(coefficientCouldBe1)
-        if coefficientCouldBe1 == 1:
+        
+        display = str(self.A)        
+        if self.A == 1:
             display = ""
 
-        if coefficientCouldBe1 == -1:
+        if self.A == -1:
             display = "-"
         
-        return display
+        # Prefix with "y = ".
+        # Then append "x^2"using the unicode escape sequence for superscript-2 (\u00b2).
+        return "y = " + display + "x\u00b2 "
     
-    def DontShow1ForB(self, coefficientCouldBe1):
+    def DisplayB(self):
         # When B is 1 or -1 we don't need to diplay the "1"
         # we just need the "+" or "-" sign    
         
-        if coefficientCouldBe1 == 1:
-            return "+ "
+        if self.B == 1:
+            return "+ x "
 
-        if coefficientCouldBe1 == -1:
-            return "-"
+        if self.B == -1:
+            return "-x "
 
-        display = str(coefficientCouldBe1)
+        display = str(self.B)
 
-        if coefficientCouldBe1 > 0 :
-            return "+ " + display
+        if self.B > 0 :
+            return "+ " + display + "x "
         
         #B is negative but not -1
-        return display
+        return display + "x "
     
-    def DontShow1ForC(self, coefficientCouldBe1):
-        # When C is 0, don't show it
-        # When C is positive we prefix a "+" sign.
-        # When C is negative, str includes the "-" sign.
+    def DisplayConstant(self, constantTerm):
+        #For displaying constants like C or k
+
+        # When constantTerm is 0, don't show it
+        # When constantTerm is positive we prefix a "+" sign.
+        # When constantTerm is negative, str includes the "-" sign.
         
-        if coefficientCouldBe1 == 0:
+        if constantTerm == 0:
             return ""
 
-        display = str(coefficientCouldBe1)
+        display = str(constantTerm)
 
-        if coefficientCouldBe1 < 0:
+        if constantTerm < 0:
             return display
         
-        # C is positive so prefix a "+" sign
+        # constantTerm is positive so prefix a "+" sign
         return "+ " + display
         
+    def VertexForm(self):
         
+        # To display Vertex Form    : y = A(x-h)^2 + k
+        
+        return self.DisplayAVertex() + self.DisplayH() + self.DisplayConstant(self.k)
+        
+    def DisplayAVertex(self):
+        # When A is 1 or -1 we don't need to diplay the "1" or the "-" sign
+        
+        display = str(self.A)        
+        if self.A == 1:
+            display = ""
+
+        if self.A == -1:
+            display = "-"
+        
+        # Prefix with "y = ".        
+        return "y = " + display
+
+    def DisplayH(self):
+        #In Vertex form, h is subtracted from x, so we need to flip signs 
+
+        #First negate h
+        negativeH = -1 * self.h
+
+        # If that's positive, add a "+" sign
+        if negativeH > 0:
+            return "(x + " + str(negativeH) + ")\u00b2 "
+        
+        # otherwise add a "-" sign
+        return "(x - " + str(self.h) + ")\u00b2 "
+    
 def main():
 
-    quad1 = Quadratic(5, -2, 0.5)
+    quad1 = Quadratic(5, -1, -2)
 
     print(quad1.StandardForm())
+    print()
+    print ("h = " + str(quad1.h))
+    print(quad1.VertexForm())
 
 main()
