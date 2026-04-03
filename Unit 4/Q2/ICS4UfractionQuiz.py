@@ -119,6 +119,8 @@ class Question:
         
         self.QuestionNumber = questionNumber        
         
+        # Keep trying until the question has only non-whole improper fractions
+        # And until the answer is also not whole
         while True:
             #Generate a pair of improper fractions that are not accidentally whole numbers
             self.f1 = self.GetNonWholeImproperFraction()
@@ -126,13 +128,35 @@ class Question:
 
 
             #TODO random arithmetic operation
-            #TODO make sure Correct answer is also not whole
+            
 
-            self.CorrectAnswer = self.f1.Add(self.f2)
+            self.CorrectAnswer = self.PerformRandomOperation()
 
+            # Make sure Correct answer is also not whole
             if self.CorrectAnswer.IsWhole() == False:
                 return
 
+    def PerformRandomOperation(self):
+        # Select an arithmetic operation at random and perform it on 
+        # the two fractions, storing the operator symbol for display
+        
+        opIndex = random.randint(1, 4)
+        
+        if opIndex == 1:
+            self.OperatorSymbol = "+"
+            return self.f1.Add(self.f2)
+        
+        if opIndex == 2:
+            self.OperatorSymbol = "-"
+            return self.f1.Subtract(self.f2)
+        
+        if opIndex == 3:
+            self.OperatorSymbol = "X"
+            return self.f1.Multiply(self.f2)
+        
+        self.OperatorSymbol = " / "
+        return self.f1.Divide(self.f2)
+        
     def GetNonWholeImproperFraction(self):
 
         # Make a fraction with random numbers -15 to +15
@@ -157,7 +181,7 @@ class Question:
             return random.randint(1, 15)
     
     def __str__(self):
-        return f"Question {self.QuestionNumber}: What is {self.f1} + {self.f2} ?"
+        return f"Question {self.QuestionNumber}: What is {self.f1} {self.OperatorSymbol} {self.f2} ?"
     
     def CheckAnswer(self, answer: "Answer"):
         if self.CorrectAnswer.Equals(answer.AnswerFraction):
