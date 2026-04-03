@@ -1,4 +1,9 @@
+#imports ------------------------------------------
+
 import math
+
+
+#Classes for Objects ------------------------------
 
 class Fraction:
 
@@ -101,17 +106,77 @@ class Fraction:
         fQuotient.Reduce()
         return fQuotient
 
+class Question:
+
+    def __init__(self, questionNumber: int):
+        self.QuestionNumber = questionNumber
+
+    def __str__(self):
+        return "Question " + str(self.QuestionNumber) + ": What is 3/4 + 5/8 ?"
+    
+    def CheckAnswer(self, answer: "Answer"):
+        return "Correct!"
+
+class Answer:
+    
+    def ReadAnswer(self):
+        self.Answser = input("Enter your answer as 'n/d' : ")
+
+class Quiz:
+
+    def WelcomeMessage(self):
+        print()
+        print("Welcome to the Fractions Quiz!")
+        print("------------------------------")
+        print()
+
+    def NextQuestion(self, questionNumber: int):
+        q1 = Question(questionNumber)
+        print(q1)
+        print()
+        return q1
+
+    def NextAnswer(self):
+        a1 = Answer()
+        a1.ReadAnswer()
+        return a1
+
+    def CheckAnswer(self, question: "Question", answer: "Answer"):
+        print(question.CheckAnswer(answer))
+        print()
+
+    def Exit(self, questionNumber):
+        print()
+        print("----------------------------------------------------------------")
+        print(f"Thank you for attempting {questionNumber} questions. Goodbye!")
+        print("----------------------------------------------------------------")
+        print()
+
+    def Start(self):
+        self.WelcomeMessage()
+
+        questionNumber = 1
+        while True:
+            q1 = self.NextQuestion(questionNumber)
+            a1 = self.NextAnswer()
+            
+            if a1.Answser == "":
+                break
+
+            self.CheckAnswer(q1, a1)
+            questionNumber += 1
+            
+        self.Exit(questionNumber)
+        
+
+#Functions for Main Program -----------------------
+
+#Main Program -------------------------------------
+
 def main():
     
-
-    f1 = Fraction(3, 4)
-    f2 = Fraction(0, 2)
-        
-    print(f1, f2)  
-    print(f1.Add(f2))
-    print(f1.Subtract(f2))
-    print(f1.Multiply(f2))
-    print(f1.Divide(f2))
+    quiz = Quiz()
+    quiz.Start()
        
 
 main()
