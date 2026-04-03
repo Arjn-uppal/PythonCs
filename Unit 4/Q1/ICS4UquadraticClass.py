@@ -83,7 +83,7 @@ class Quadratic:
     def VertexForm(self):
         
         # To display Vertex Form    : y = A(x-h)^2 + k
-        
+
         return self.DisplayAVertex() + self.DisplayH() + self.DisplayConstant(self.k)
         
     def DisplayAVertex(self):
@@ -112,13 +112,35 @@ class Quadratic:
         # otherwise add a "-" sign
         return "(x - " + str(self.h) + ")\u00b2 "
     
+    def OpeningDirection(self):
+        if self.A > 0:
+            return "Up"
+        
+        return "Down"
+    
+    def VertexCoordinates(self):
+        coordinates = [ self.h, self.k]
+        return coordinates
+    
+    def YIntercept(self):
+        #This happens when x = 0
+        #So we substitute x = 0 in the equation
+        # Y = (A)(0)^2 + B(0) + C
+        # Y = C
+        return self.C
+
+    
 def main():
 
-    quad1 = Quadratic(5, -1, -2)
+    quad1 = Quadratic(-5, -1, -2)
 
     print(quad1.StandardForm())
     print()
     print ("h = " + str(quad1.h))
     print(quad1.VertexForm())
+    print()
+    print("Direction of opening: " + quad1.OpeningDirection())
+    print()
+    print("Vertex Coordinates: " + str(quad1.VertexCoordinates()))
 
 main()
