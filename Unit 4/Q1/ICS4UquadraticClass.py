@@ -1,3 +1,5 @@
+import math
+
 class Quadratic:
 
     #Standard Form  : y = Ax^2 + Bx + C
@@ -123,24 +125,95 @@ class Quadratic:
         return coordinates
     
     def YIntercept(self):
-        #This happens when x = 0
-        #So we substitute x = 0 in the equation
+        # This happens when x = 0
+        # So we substitute x = 0 in the equation
         # Y = (A)(0)^2 + B(0) + C
         # Y = C
         return self.C
+    
+    def XIntercepts(self):
+        # Using the Quadratic formula to find the X - Intercepts        
 
+        # X-intercept list        
+        roots = []
+        
+        # The discriminant in the quadratic formula
+        dSquared = (self.B * self.B) - (4 * self.A * self.C)
+
+        # There are no real roots
+        if dSquared < 0:
+            return roots
+        
+        d = math.sqrt(dSquared)               
+        
+        roots.append(((-1 * self.B) + d) / (2 * self.A))
+
+        # There is one real root
+        if d == 0:            
+            return roots
+        
+        # There are two real roots        
+        
+        roots.append(((-1 * self.B) - d) / (2 * self.A))                
+        return roots
+    
+    def Add(self, addend: "Quadratic"):
+        #Return a new Quadratic that is the sum of self and addend:
+        return Quadratic(self.A + addend.A, self.B + addend.B, self.C + addend.C)
+
+        
     
 def main():
+    # Demonstrate all the methods of the Quadratic class
 
-    quad1 = Quadratic(-5, -1, -2)
+    print()
+    print("Demo of all methods of the Quadratic class")
+    print("------------------------------------------")
+    print()
 
+    #Create our first quadratic using the constructor:
+    quad1 = Quadratic(5, -2, -1)
+    print("Create a quadratic with A=5, B=-2 and C=-1: Quadratic(5, -2, -1)")
+    print("h for vertex form calculated as: " + str(quad1.h))
+    print("k for vertex form calculated as: " + str(quad1.k))
+    print()
+
+    #Display in Standard Form:
+    print("Display in Standard Form: quad1.StandardForm(): ")
     print(quad1.StandardForm())
     print()
-    print ("h = " + str(quad1.h))
+
+    #Display in Vertex Form:
+    print("Display in Vertex Form: quad1.VertexForm(): ")
     print(quad1.VertexForm())
     print()
+
+    #Direction of opening
     print("Direction of opening: " + quad1.OpeningDirection())
     print()
+
+    #Vertex Coordinates
     print("Vertex Coordinates: " + str(quad1.VertexCoordinates()))
+    print()
+
+    #Y-Intercept
+    print("Y-Intercept: " + str(quad1.YIntercept()))
+    print()
+
+    #X-Intercepts
+    print("X-Intercepts: " + str(quad1.XIntercepts()))
+    print()
+
+    #Create a second quadratic and add them together
+    quad2 = Quadratic(-3, 3, 2)
+    qSum = quad1.Add(quad2)
+    print("Create a second instance of a quadratic with A=-3, B=3 and C=2.")
+    print(quad2.StandardForm())
+    print()
+
+    print("Add the two instances together : qSum = quad1.Add(quad2)")
+    print("The sum is : " + qSum.StandardForm())
+    print("And in Vertex Form : " + qSum.VertexForm())
+    print()
 
 main()
