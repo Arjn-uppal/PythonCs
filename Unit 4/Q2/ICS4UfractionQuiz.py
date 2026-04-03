@@ -1,7 +1,7 @@
 #imports ------------------------------------------
 
 import math
-
+import random
 
 #Classes for Objects ------------------------------
 
@@ -20,8 +20,15 @@ class Fraction:
         # Set the denominator
         self.D = denominator
 
-        # Calculate improper fraction
-        self.improper = self.N / self.D
+    def IsWhole(self):
+        if self.N % self.D == 0:
+            return True
+        return False
+    
+    def IsImproper(self):
+        if self.N > self.D:
+            return True
+        return False
 
     def Reduce(self):
 
@@ -109,18 +116,67 @@ class Fraction:
 class Question:
 
     def __init__(self, questionNumber: int):
-        self.QuestionNumber = questionNumber
+        
+        self.QuestionNumber = questionNumber        
+        
+        while True:
+            #Generate a pair of improper fractions that are not accidentally whole numbers
+            self.f1 = self.GetNonWholeImproperFraction()
+            self.f2 = self.GetNonWholeImproperFraction()
 
+
+            #TODO random arithmetic operation
+            #TODO make sure Correct answer is also not whole
+
+            self.CorrectAnswer = self.f1.Add(self.f2)
+
+            if self.CorrectAnswer.IsWhole() == False:
+                return
+
+    def GetNonWholeImproperFraction(self):
+
+        # Make a fraction with random numbers -15 to +15
+        f1 = Fraction(self.RandomNumerator15(), self.RandomDenominator15())
+
+        # Make sure its actually improper, and not accidentally a whole number
+        while True:
+            if f1.IsWhole() == False and f1.IsImproper() == True:
+                return f1
+            
+            #Try again
+            f1 = Fraction(self.RandomNumerator15(), self.RandomDenominator15())
+
+    def RandomNumerator15(self):
+
+        while True:
+            randInt =  random.randint(-15, 15)
+            if randInt != 0:
+                return randInt
+            
+    def RandomDenominator15(self):
+            return random.randint(1, 15)
+    
     def __str__(self):
-        return "Question " + str(self.QuestionNumber) + ": What is 3/4 + 5/8 ?"
+        return f"Question {self.QuestionNumber}: What is {self.f1} + {self.f2} ?"
     
     def CheckAnswer(self, answer: "Answer"):
-        return "Correct!"
+        if self.CorrectAnswer.Equals(answer.AnswerFraction):
+            return "Correct!"
+        return f"WRONG! The correct answer in lowest terms is {self.CorrectAnswer}."
 
 class Answer:
     
     def ReadAnswer(self):
-        self.Answser = input("Enter your answer as 'n/d' : ")
+        self.AnswerString = input("Enter your answer as 'n/d' : ")
+        if self.AnswerString == "":
+            #Quitting
+            return
+        
+        ns, ds = self.AnswerString.split("/")
+        n = int(ns)
+        d = int(ds)
+        self.AnswerFraction = Fraction(n, d)
+
 
 class Quiz:
 
@@ -128,6 +184,10 @@ class Quiz:
         print()
         print("Welcome to the Fractions Quiz!")
         print("------------------------------")
+        print()
+        print("Enter each answer in the form 'n/d'. Remember to give answer in lowest form.")
+        print("Enter blank '' to quit.")
+        print("Good luck!")
         print()
 
     def NextQuestion(self, questionNumber: int):
@@ -156,11 +216,13 @@ class Quiz:
         self.WelcomeMessage()
 
         questionNumber = 1
+        #Ask new questions until they quit
         while True:
             q1 = self.NextQuestion(questionNumber)
             a1 = self.NextAnswer()
             
-            if a1.Answser == "":
+            #Check for quitting
+            if a1.AnswerString == "":
                 break
 
             self.CheckAnswer(q1, a1)
