@@ -121,7 +121,7 @@ class Quadratic:
         return "Down"
     
     def VertexCoordinates(self):
-        coordinates = [ self.h, self.k]
+        coordinates = [self.h, self.k]
         return coordinates
     
     def YIntercept(self):
