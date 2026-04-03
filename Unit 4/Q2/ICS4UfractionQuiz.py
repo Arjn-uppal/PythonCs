@@ -139,19 +139,19 @@ class Question:
     def PerformRandomOperation(self):
         # Select an arithmetic operation at random and perform it on 
         # the two fractions, storing the operator symbol for display
-        
+
         opIndex = random.randint(1, 4)
         
         if opIndex == 1:
-            self.OperatorSymbol = "+"
+            self.OperatorSymbol = " + "
             return self.f1.Add(self.f2)
         
         if opIndex == 2:
-            self.OperatorSymbol = "-"
+            self.OperatorSymbol = " - "
             return self.f1.Subtract(self.f2)
         
         if opIndex == 3:
-            self.OperatorSymbol = "X"
+            self.OperatorSymbol = " X "
             return self.f1.Multiply(self.f2)
         
         self.OperatorSymbol = " / "
@@ -190,15 +190,47 @@ class Question:
 
 class Answer:
     
+    # Make sure the string holds an integer
+    def represents_int(self, s):
+        try:
+            int(s)
+            return True
+        except ValueError:
+            return False
+    
     def ReadAnswer(self):
-        self.AnswerString = input("Enter your answer as 'n/d' : ")
-        if self.AnswerString == "":
-            #Quitting
-            return
+        validAnswer = False
+        while validAnswer == False:
+            self.AnswerString = input("Enter your answer as 'n/d' : ")
+            if self.AnswerString == "":
+                #Quitting
+                return
+            
+            # Must contain '/'
+            slashPosition = self.AnswerString.find('/')
+            if slashPosition == -1:
+                print("You must enter a fraction including the '/' symbol")                
+                continue
+
+            #Slash must not be at the beginning or end
+            if slashPosition == 0 or slashPosition == len(self.AnswerString)-1:
+                print("The '/' symbol must be between two integers")
+                continue
+            
+            #Must contain only one '/'
+            elements = self.AnswerString.split("/")
+            if len(elements) != 2:
+                print("Enter a fraction with only one '/' symbol.")
+                continue
+
+            if self.represents_int(elements[0]) == False or self.represents_int(elements[1]) == False:
+                print("Please enter integers only for the numerator and denominator.")
+                continue
+
+            validAnswer = True
         
-        ns, ds = self.AnswerString.split("/")
-        n = int(ns)
-        d = int(ds)
+        n = int(elements[0])
+        d = int(elements[1])
         self.AnswerFraction = Fraction(n, d)
 
 
