@@ -26,7 +26,16 @@ class Fraction:
         return False
     
     def IsImproper(self):
-        if self.N > self.D:
+        #First make a copy of the numerator
+        nCopy = self.N
+
+        #Check if the numerator is negative
+        if nCopy < 0:
+            nCopy = -1 * nCopy
+
+        # Now if the absolute value of the numerator is more than the denominator
+        # the fraction is improper
+        if nCopy > self.D:
             return True
         return False
 
@@ -41,7 +50,18 @@ class Fraction:
         self.D = self.D // gcd
 
     def Equals(self, other: "Fraction"):
-        # Reduce both fractions.
+        # Checks for OBJECT equality.
+        # So DOES NOT reduce fractions first
+        # Make sure both numerators and denominators match
+
+        if self.N == other.N and self.D == other.D:
+            return True
+        
+        return False
+    
+    def MathEquals(self, other: "Fraction"):
+        # Checks for MATHEMATICAL equality.
+        # So reduce both fractions first
         # Make sure both numerators and denominators match
 
         self.Reduce()
@@ -50,7 +70,7 @@ class Fraction:
         if self.N == other.N and self.D == other.D:
             return True
         
-        return False        
+        return False
     
     def __str__(self):
         # Returns a fraction in the form "n/d"
@@ -126,10 +146,6 @@ class Question:
             self.f1 = self.GetNonWholeImproperFraction()
             self.f2 = self.GetNonWholeImproperFraction()
 
-
-            #TODO random arithmetic operation
-            
-
             self.CorrectAnswer = self.PerformRandomOperation()
 
             # Make sure Correct answer is also not whole
@@ -165,6 +181,7 @@ class Question:
         # Make sure its actually improper, and not accidentally a whole number
         while True:
             if f1.IsWhole() == False and f1.IsImproper() == True:
+                f1.Reduce()
                 return f1
             
             #Try again
@@ -181,11 +198,17 @@ class Question:
             return random.randint(1, 15)
     
     def __str__(self):
-        return f"Question {self.QuestionNumber}: What is {self.f1} {self.OperatorSymbol} {self.f2} ?"
+
+        #Add brackets around the second fraction if it is negative
+        secondFractionDisplay = str(self.f2)
+        if self.f2.N < 0:
+            secondFractionDisplay = f"( {self.f2} )"
+
+        return f"Question {self.QuestionNumber} :  What is  {self.f1} {self.OperatorSymbol} {secondFractionDisplay} ?"
     
     def CheckAnswer(self, answer: "Answer"):
         if self.CorrectAnswer.Equals(answer.AnswerFraction):
-            return "Correct!"
+            return "\n************\n* Correct! *\n************\n"
         return f"WRONG! The correct answer in lowest terms is {self.CorrectAnswer}."
 
 class Answer:
@@ -223,6 +246,7 @@ class Answer:
                 print("Enter a fraction with only one '/' symbol.")
                 continue
 
+            #Both elements must be integers
             if self.represents_int(elements[0]) == False or self.represents_int(elements[1]) == False:
                 print("Please enter integers only for the numerator and denominator.")
                 continue
