@@ -224,8 +224,8 @@ class Answer:
     def ReadAnswer(self):
         validAnswer = False
         while validAnswer == False:
-            self.AnswerString = input("Enter your answer as 'n/d' : ")
-            if self.AnswerString == "":
+            self.AnswerString = input("Enter your answer as 'n/d' (or 'quit' to exit): ")
+            if self.AnswerString == "" or self.AnswerString.lower() == "quit":
                 #Quitting
                 return
             
@@ -251,10 +251,16 @@ class Answer:
                 print("Please enter integers only for the numerator and denominator.")
                 continue
 
+            #Denominator cannot be 0
+            d = int(elements[1])
+            if d == 0:
+                print("Denominator must be non-zero")
+                continue
+
             validAnswer = True
         
         n = int(elements[0])
-        d = int(elements[1])
+        
         self.AnswerFraction = Fraction(n, d)
 
 
@@ -266,7 +272,7 @@ class Quiz:
         print("------------------------------")
         print()
         print("Enter each answer in the form 'n/d'. Remember to give answer in lowest form.")
-        print("Enter blank '' to quit.")
+        print("Enter blank '' or 'quit' to quit.")
         print("Good luck!")
         print()
 
@@ -302,7 +308,7 @@ class Quiz:
             a1 = self.NextAnswer()
             
             #Check for quitting
-            if a1.AnswerString == "":
+            if a1.AnswerString == "" or a1.AnswerString.lower() == "quit":
                 break
 
             self.CheckAnswer(q1, a1)
