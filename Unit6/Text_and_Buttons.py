@@ -1,28 +1,23 @@
+import random
 import pygame
+
 from pygameRilett import Game
 from pygameRilett import Room
 from pygameRilett import GameObject
+from pygameRilett import TextRectangle
 
 # Create a new game
 # NOTE g is comprised of all the methods and global variables inside the Game class
-g = Game(550,480)
+g = Game(640,480)
 
-# Color
+# Colors
 BLACK = (0,0,0)
-RED = (255,0,0)
 WHITE = (255,255,255)
 
-#Create Resources
+
+# Create Resources
 simpleBackground = g.makeBackground(BLACK)
-
-#NOTE "makeRectangle method is from the pygameRillet file"
-rectangleImage = g.makeRectangle(g.windowWidth, 20, RED)
-circleImage = g.makeCircle(10, WHITE)
-
-marioImage = g.makeSpriteImage("marioPiic.png")
-
-# Alter the size of the image to fit the game
-marioImage = pygame.transform.scale(marioImage, (180,140))
+gameFont = g.makeFont("Arial", 38)
 
 # Create rooms
 r1 = Room("Game", simpleBackground)
@@ -33,39 +28,37 @@ g.addRoom(r1)
 
 # NOTE that each class is inheriting the "Draw" method from the pygame.sprite.class in pygameRillet file. This happens
 # through the extension of the GameObject class
-class Platform(GameObject):
 
-    def __init__(self, picture, xPos, yPos):
+# Classes for Game Objects
+class ClickButton(TextRectangle):
 
-        GameObject.__init__(self, picture)
-        self.rect.x = xPos
-        self.rect.y = yPos
+    def __init__(self, text, xPos, yPos, font, textColor, buttonWidth, buttonHeight, buttonColor):
+        TextRectangle.__init__(self, text, xPos, yPos, font, textColor, buttonWidth, buttonHeight, buttonColor)
 
-class Enemy(GameObject):
-    def __init__(self, picture, xPos, yPos):
+        self.clickCounter = 0
 
-        GameObject.__init__(self, picture)
-        self.rect.center = (xPos, yPos)
+    def update(self):
 
-class Player(GameObject):
-    def __init__(self, picture, xPos, yPos):
+        self.checkMousePressedOnMe(event)
 
-        GameObject.__init__(self, picture)
-        self.rect.x = xPos
-        self.rect.y = yPos
-        self.image.set_colorkey(WHITE)
+        if self.mouseHasPressedOnMe and event.type == pygame.MOUSEBUTTONUP:
+
+            self.clickCounter += 1
+            clickedTimes.setText("You Clicked: " + str(self.clickCounter) + " Times")
+
+            self.mouseHasPressedOnMe = False
 
 #Initialize Objects and add to the room
-floor = Platform(rectangleImage, 0, 450)
-r1.addObject(floor)
+title = TextRectangle("CLICK COUNTER", 10, 10, gameFont, WHITE)
+r1.addObject(title)
 
-circleEnemy = Enemy(circleImage, g.windowWidth/2, 425)
-r1.addObject(circleEnemy)
+b = ClickButton("CLICK ME", 10, g.windowHeight - 75, gameFont, BLACK, 150, 40, WHITE)
+r1.addObject(b)
 
-mario = Player(marioImage, 0, 350)
-r1.addObject(mario)
+clickedTimes = TextRectangle("You Clicked: " + str(b.clickCounter) + " Times", 10, 50, gameFont, WHITE)
+r1.addObject(clickedTimes)
 
-#Initialize the game
+# Start Game
 g.start()
 
 #Game Loop
