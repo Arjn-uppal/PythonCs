@@ -5,6 +5,7 @@ from pygameRilett import Room
 from pygameRilett import TextRectangle
 from pygameRilett import TextCircle
 from pygameRilett import GameObject
+from pygameRilett import Alarm
 
 # Create a new game
 # NOTE g is comprised of all the methods and global variables inside the Game class
@@ -59,6 +60,16 @@ class ChoiceLetter(TextCircle):
 
         self.letter = text
 
+    def update(self):
+
+        if mw.notDone:
+            self.checkMousePressedOnMe(event)
+
+            if self.mouseHasPressedOnMe and event.type == pygame.MOUSEBUTTONUP:
+
+                mw.checkLetter(self.letter)
+
+                self.kill()
 
 class MysteryLetter(TextCircle):
 
@@ -77,11 +88,45 @@ class MysteryWord(GameObject):
         #Attributes
         self.mysteryWord = word
         self.letters = []
+        self.numberCorrect = 0
+        self.guessesLeft = guesses
+        self.notDone = True
+        self.timer = Alarm()
 
         for i in range(0, len(self.mysteryWord)):
             letter = MysteryLetter("-", self.mysteryWord[i], 70 * (i*1) + xPos, yPos, titleFont, BLACK, 25, WHITE)
             self.letters.append(letter)
             r2.addObject(letter)
+
+
+    def checkLetter(self, clickedLetter):
+
+        found = False
+        for i in range(0, len(self.letters)):
+
+            if clickedLetter == self.letters[i].correctLetter:
+                self.letters[i].setText(self.letters[i].correctLetter)
+                self.numberCorrect += 1
+                found = True
+
+        if not found:
+            self.guessesLeft -= 1
+            status.setText("Wrong Guesses Left: " + str(self.guessesLeft))
+
+        if self.numberCorrect == len(self.mysteryWord):
+            status.setText("You Win")
+            self.notDone = False
+            self.timer.setAlarm(3000)
+
+        if self.guessesLeft == 0:
+            status.setText("You Lose")
+            self.notDone = False
+            self.timer.setAlarm(3000)
+
+    def update(self):
+
+        if self.timer.finished():
+            g.stop()
 
 
 #Initialize Objects in the Room------------------------------------
@@ -94,6 +139,8 @@ r1.addObject(start)
 mw = MysteryWord("GLENDALE", 15, 500, 5)
 r2.addObject(mw)
 
+status = TextRectangle("Wrong Guesses Left: " + str(mw.guessesLeft), 60, 400, titleFont, WHITE)
+r2.addObject(status)
 
 charactersRow1 = "ABCDEFGHIJ"
 for i in range(0, len(charactersRow1)):
@@ -127,8 +174,8 @@ while g.running:
         if event.type == pygame.QUIT:
             g.stop()
 
-    # Update the gamestate of all the objects
-    g.currentRoom().updateObjects()
+        # Update the gamestate of all the objects
+        g.currentRoom().updateObjects()
 
     # Render the background to the window surface
     g.currentRoom().renderBackground(g)
