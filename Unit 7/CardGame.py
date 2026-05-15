@@ -51,7 +51,54 @@ g.addRoom(r1)
 # through the extension of the GameObject class
 
 # Classes for Game Objects---------------------------------------
+class Card(GameObject):
 
+    def __init__(self, picture, value, suit):
+
+        # Initialize the super class
+        GameObject.__init__(self, picture)
+
+        # Attributes
+        self.value = value # 2 - 14
+        self.suit = suit # H, D, S, C
+
+    def __str__(self):
+        return str(self.value) + self.suit
+    
+
+class CardDeck(GameObject):
+
+    def __init__(self, picture, xPos, yPos):
+
+        # Initialize the super class
+        GameObject.__init__(self, picture)
+
+        # Attributes
+        self.deck = []
+        self.rect.x = xPos
+        self.rect.y = yPos
+
+        for i in range(0, len(diamondPics)):
+            self.deck.append(Card(diamondPics[i], i+2, "D"))
+
+        for i in range(0, len(heartPics)):
+            self.deck.append(Card(heartPics[i], i+2, "H"))
+
+        for i in range(0, len(spadePics)):
+            self.deck.append(Card(spadePics[i], i+2, "S"))
+
+        for i in range(0, len(clubPics)):
+            self.deck.append(Card(clubPics[i], i+2, "C"))
+
+        random.shuffle(self.deck)
+
+    def __str__(self):
+        
+        s = ""
+        for card in self.deck:
+            s = s + str(card) + " "
+        s = "Deck:\n" + s + "\n"
+        return s
 
 
 #Initialize Objects in the Room------------------------------------
@@ -62,6 +109,10 @@ playedLabel = TextRectangle("Played Cards", 8, 400, gameFont, RED)
 r1.addObject(playerHandLabel)
 r1.addObject(deckLabel)
 r1.addObject(playedLabel)
+
+d = CardDeck(topCard, 8, 250)
+r1.addObject(d)
+print(d)
 
 # Start Game
 g.start()
